@@ -1,0 +1,60 @@
+<div class="page">
+  <div class="container">
+    <div class="shop-banner">
+      <div>
+        <span class="eyebrow">In the warehouse</span>
+        <h2>Ready to ship from New York</h2>
+        <p>Free standard shipping over $50. Delivery in 3–5 business days.</p>
+      </div>
+      <a class="btn btn-light" routerLink="/shipping">Shipping details</a>
+    </div>
+  <div class="shop-layout">
+    <aside class="panel">
+      <h2>Categories</h2>
+      <div class="filters">
+        <button type="button" [class.active]="category() === 'All'" (click)="choose('All')">All products</button>
+        @for (item of categories(); track item.name) {
+          <button type="button" [class.active]="category() === item.name" (click)="choose(item.name)">
+            <span>{{ item.name }}</span>
+            <small>{{ item.count }}</small>
+          </button>
+        }
+      </div>
+    </aside>
+    <section>
+      <div class="page-head">
+        <div>
+          <h1>{{ title() }}</h1>
+          <p>{{ products().length }} products · Free shipping over $50</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <span class="muted">Sort</span>
+        <select [value]="sort()" (change)="changeSort($any($event.target).value)" aria-label="Sort products">
+          <option value="newest">Newest</option>
+          <option value="price_asc">Price: low to high</option>
+          <option value="price_desc">Price: high to low</option>
+          <option value="rating">Top rated</option>
+        </select>
+      </div>
+      @if (error()) { <p class="banner-error">{{ error() }}</p> }
+      @if (loading()) {
+        <div class="skeleton-grid">
+          @for (item of [1, 2, 3, 4]; track item) { <div class="skeleton-card"></div> }
+        </div>
+      } @else if (!products().length) {
+        <div class="empty panel">
+          <h2>Nothing matches</h2>
+          <p>Try another category or a shorter search.</p>
+        </div>
+      } @else {
+        <div class="grid">
+          @for (product of products(); track product._id) {
+            <app-product-card [product]="product" />
+          }
+        </div>
+      }
+    </section>
+  </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>Free standard shipping over $50</span>
+    <span class="hide-sm">30-day returns</span>
+    <span class="hide-sm">hello&#64;northline.store</span>
+  </div>
+</div>
+<header class="header">
+  <div class="container header-inner">
+    <button class="menu-btn" type="button" (click)="open.set(!open())" aria-label="Open menu">☰</button>
+    <a routerLink="/" class="logo" (click)="close()">
+      <span class="logo-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M6 8h12l-1 12H7L6 8z" stroke="white" stroke-width="1.8"/>
+          <path d="M9 8V7a3 3 0 0 1 6 0v1" stroke="white" stroke-width="1.8"/>
+        </svg>
+      </span>
+      Northline
+    </a>
+    <form class="search" (ngSubmit)="search()">
+      <input name="q" [(ngModel)]="query" placeholder="Search bags, headphones, watches..." aria-label="Search products" />
+      <button type="submit" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+        </svg>
+      </button>
+    </form>
+    <div class="header-actions">
+      <a class="header-link" routerLink="/wishlist" (click)="close()">
+        <strong>{{ wishlist.items().length }}</strong>
+        <span>Wishlist</span>
+      </a>
+      <a class="header-link" [routerLink]="auth.isLoggedIn() ? '/orders' : '/login'" (click)="close()">
+        <strong>{{ auth.user()?.name?.split(' ')?.[0] || 'Account' }}</strong>
+        <span>{{ auth.isLoggedIn() ? 'Orders' : 'Sign in' }}</span>
+      </a>
+      <a class="header-link cart-link" routerLink="/cart" (click)="close()">
+        @if (cart.count()) { <em class="cart-count">{{ cart.count() }}</em> }
+        <strong>Cart</strong>
+        <span>View bag</span>
+      </a>
+    </div>
+  </div>
+  <nav class="nav" [class.open]="open()">
+    <div class="container nav-inner">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="close()">Home</a>
+      <a routerLink="/shop" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="close()">Shop</a>
+      <a routerLink="/shop" [queryParams]="{ category: 'Bags' }" (click)="close()">Bags</a>
+      <a routerLink="/shop" [queryParams]="{ category: 'Audio' }" (click)="close()">Audio</a>
+      <a routerLink="/shop" [queryParams]="{ category: 'Watches' }" (click)="close()">Watches</a>
+      <a routerLink="/shop" [queryParams]="{ category: 'Cameras' }" (click)="close()">Cameras</a>
+      <a routerLink="/shop" [queryParams]="{ deal: 'true' }" (click)="close()">Deals</a>
+      <a routerLink="/about" routerLinkActive="active" (click)="close()">About</a>
+    </div>
+  </nav>
+</header>

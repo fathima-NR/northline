@@ -1,0 +1,36 @@
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <a routerLink="/" class="logo">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M6 8h12l-1 12H7L6 8z" stroke="white" stroke-width="1.8"/>
+            <path d="M9 8V7a3 3 0 0 1 6 0v1" stroke="white" stroke-width="1.8"/>
+          </svg>
+        </span>
+        Northline
+      </a>
+      <p>Quality bags, audio, watches, cameras, and home accessories.</p>
+    </div>
+    <div>
+      <h3>Shop</h3>
+      <a routerLink="/shop">All products</a>
+      <a routerLink="/shop" [queryParams]="{ category: 'Bags' }">Bags</a>
+      <a routerLink="/shop" [queryParams]="{ category: 'Audio' }">Audio</a>
+      <a routerLink="/shop" [queryParams]="{ deal: 'true' }">Deals</a>
+      <a routerLink="/about">About the shop</a>
+    </div>
+    <div>
+      <h3>Customer care</h3>
+      <a routerLink="/shipping">Shipping</a>
+      <a routerLink="/returns">Returns</a>
+      <a routerLink="/contact">Contact</a>
+      <a routerLink="/orders">Track an order</a>
+    </div>
+    <div>
+      <h3>Visit</h3>
+      <p>120 Market Street<br />+1 202 555 0148<br />hello&#64;northline.store</p>
+    </div>
+  </div>
+  <div class="container legal">© {{ year }} Northline. Quality products, trusted by thousands.</div>
+</footer>

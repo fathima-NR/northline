@@ -1,0 +1,30 @@
+<article class="product-card">
+  <a class="card-media" [routerLink]="['/product', product().slug]">
+    @if (discountOf(product())) {
+      <span class="pill">-{{ discountOf(product()) }}%</span>
+    }
+    <img [src]="product().image" [alt]="product().name" />
+    <span class="view-chip">View</span>
+  </a>
+  <button class="wish" [class.on]="wished()" (click)="toggleWish()" [attr.aria-label]="wished() ? 'Remove from wishlist' : 'Save to wishlist'">♥</button>
+  <div class="card-body">
+    <span class="kicker">{{ product().category }}</span>
+    <a [routerLink]="['/product', product().slug]"><h3>{{ product().name }}</h3></a>
+    <span class="muted">{{ product().unit }}</span>
+    <div class="stars" [attr.aria-label]="product().rating + ' out of 5'">
+      @for (star of stars(); track star) {
+        <span [class.on]="product().rating >= star - 0.25">★</span>
+      }
+      <small> {{ product().reviewCount }}</small>
+    </div>
+    <div class="price-row">
+      <strong>{{ money(product().price) }}</strong>
+      @if (product().comparePrice > product().price) {
+        <s>{{ money(product().comparePrice) }}</s>
+      }
+    </div>
+    <button class="btn btn-block" (click)="add()" [disabled]="product().stock < 1">
+      {{ product().stock < 1 ? 'Out of stock' : 'Add to cart' }}
+    </button>
+  </div>
+</article>

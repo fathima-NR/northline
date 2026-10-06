@@ -1,0 +1,50 @@
+<div class="page">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <h1>Checkout</h1>
+        <p>Where should we send the order?</p>
+      </div>
+    </div>
+    @if (!cart.items().length) {
+      <div class="empty panel">
+        <h2>Nothing to check out</h2>
+        <a class="btn" routerLink="/shop">Shop products</a>
+      </div>
+    } @else {
+      <div class="split">
+        <form class="panel" [formGroup]="form" (ngSubmit)="place()">
+          @if (error()) { <p class="form-error">{{ error() }}</p> }
+          <div class="form-row">
+            <label class="field"><span>Full name</span><input formControlName="fullName" /></label>
+            <label class="field"><span>Phone</span><input formControlName="phone" /></label>
+          </div>
+          <label class="field"><span>Street address</span><input formControlName="address" placeholder="Street, apartment, suite" autocomplete="street-address" /></label>
+          <div class="form-row">
+            <label class="field"><span>City</span><input formControlName="city" autocomplete="address-level2" /></label>
+            <label class="field"><span>State</span><input formControlName="area" autocomplete="address-level1" /></label>
+          </div>
+          <label class="field"><span>Delivery notes</span><textarea rows="3" formControlName="notes" placeholder="Buzzer, doorman, or leave at the door"></textarea></label>
+          <h3>Payment</h3>
+          <div class="pay-options">
+            <button type="button" class="pay-option" [class.active]="payment() === 'card'" (click)="payment.set('card')">Credit or debit card</button>
+            <button type="button" class="pay-option" [class.active]="payment() === 'cod'" (click)="payment.set('cod')">Cash on delivery</button>
+          </div>
+          <button class="btn" type="submit" [disabled]="placing()">Place order</button>
+        </form>
+        <aside class="panel">
+          <h2>Your bag</h2>
+          @for (line of cart.items(); track line.product._id) {
+            <div class="summary-row">
+              <span>{{ line.product.name }} × {{ line.qty }}</span>
+              <strong>{{ money(line.product.price * line.qty) }}</strong>
+            </div>
+          }
+          <div class="summary-row"><span>Standard shipping</span><strong>{{ cart.delivery() ? money(cart.delivery()) : 'Free' }}</strong></div>
+          <p class="muted">Arrives in 3–5 business days.</p>
+          <div class="summary-row total"><span>Total</span><strong>{{ money(cart.total()) }}</strong></div>
+        </aside>
+      </div>
+    }
+  </div>
+</div>

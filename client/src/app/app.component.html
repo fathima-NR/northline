@@ -1,0 +1,8 @@
+<app-navbar />
+<main>
+  <router-outlet />
+</main>
+<app-footer />
+@if (toast.message()) {
+  <div class="toast" role="status">{{ toast.message() }}</div>
+}

@@ -1,0 +1,64 @@
+<div class="page">
+  <div class="container">
+    @if (error()) {
+      <div class="empty panel">
+        <h2>{{ error() }}</h2>
+        <a class="btn" routerLink="/shop">Back to shop</a>
+      </div>
+    }
+    @if (product(); as item) {
+      <p class="muted"><a routerLink="/">Home</a> / <a routerLink="/shop">Shop</a> / {{ item.name }}</p>
+      <section class="detail">
+        <div class="detail-photo">
+          <img [src]="item.image" [alt]="item.name" />
+        </div>
+        <div class="product-copy">
+          <span class="kicker">{{ item.brand || 'Northline' }} · {{ item.category }}</span>
+          <h1>{{ item.name }}</h1>
+          <div class="stars">
+            @for (star of stars; track star) {
+              <span [class.on]="item.rating >= star - 0.25">★</span>
+            }
+            <small> {{ item.rating }} · {{ item.reviewCount }} reviews</small>
+          </div>
+          <div class="price-row" style="margin: 16px 0;">
+            <strong style="font-size: 32px;">{{ money(item.price) }}</strong>
+            @if (item.comparePrice > item.price) {
+              <s>{{ money(item.comparePrice) }}</s>
+              <span class="pill" style="position: static;">-{{ discountOf(item) }}%</span>
+            }
+          </div>
+          <p class="lede">{{ item.description }}</p>
+          @if (item.highlights?.length) {
+            <ul class="specs">
+              @for (point of item.highlights; track point) {
+                <li>{{ point }}</li>
+              }
+            </ul>
+          }
+          <p class="muted">SKU {{ item.sku }} · {{ item.stock }} ready to ship · Free standard shipping over $50</p>
+          <p class="muted">Delivery in 3–5 business days. Returns accepted within 30 days.</p>
+          <div class="hero-actions">
+            <div class="stepper">
+              <button type="button" (click)="changeQty(-1)" aria-label="Decrease quantity">−</button>
+              <strong>{{ qty() }}</strong>
+              <button type="button" (click)="changeQty(1)" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="btn" type="button" (click)="add()" [disabled]="item.stock < 1">Add to cart</button>
+            <button class="btn btn-outline" type="button" (click)="toggleWish()">{{ wished() ? 'Saved' : 'Save' }}</button>
+          </div>
+        </div>
+      </section>
+      @if (related().length) {
+        <section class="section">
+          <div class="section-head"><div><h2>More in {{ item.category }}</h2></div></div>
+          <div class="grid">
+            @for (relatedItem of related(); track relatedItem._id) {
+              <app-product-card [product]="relatedItem" />
+            }
+          </div>
+        </section>
+      }
+    }
+  </div>
+</div>

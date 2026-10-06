@@ -1,0 +1,32 @@
+<div class="page">
+  <div class="container split">
+    <div class="prose">
+      <div class="page-head">
+        <div>
+          <h1>Contact</h1>
+          <p>Orders, fit, and returns. A person reads every message.</p>
+        </div>
+      </div>
+      <p>Northline customer care<br />120 Market Street, New York, NY 10013<br />Monday to Saturday, 9:00 am – 6:00 pm ET<br />+1 202 555 0148<br />hello&#64;northline.store</p>
+      <p>For a return, include the name on the order and the product you are sending back. For a product question, include the SKU from the product page.</p>
+    </div>
+    <form class="panel" [formGroup]="form" (ngSubmit)="submit()">
+      <h2>Write to us</h2>
+      @if (sent()) { <p class="banner">{{ sent() }}</p> }
+      @if (error()) { <p class="form-error">{{ error() }}</p> }
+      <label class="field"><span>Name</span><input formControlName="name" autocomplete="name" /></label>
+      <label class="field"><span>Email</span><input type="email" formControlName="email" autocomplete="email" /></label>
+      <label class="field">
+        <span>Topic</span>
+        <select formControlName="topic">
+          <option>Order help</option>
+          <option>Shipping</option>
+          <option>Return</option>
+          <option>Product question</option>
+        </select>
+      </label>
+      <label class="field"><span>Message</span><textarea rows="5" formControlName="body"></textarea></label>
+      <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Sending...' : 'Send message' }}</button>
+    </form>
+  </div>
+</div>

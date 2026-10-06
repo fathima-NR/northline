@@ -1,0 +1,41 @@
+<div class="page">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <h1>Your orders</h1>
+        <p>Track orders that are on the way.</p>
+      </div>
+      <button class="btn btn-outline" type="button" (click)="logout()">Sign out</button>
+    </div>
+    @if (placed()) {
+      <p class="banner">Order placed. We're packing your items.</p>
+    }
+    @if (error()) { <p class="banner-error">{{ error() }}</p> }
+    @if (!orders().length && !error()) {
+      <div class="empty panel">
+        <h2>No orders yet</h2>
+        <a class="btn" routerLink="/shop">Start shopping</a>
+      </div>
+    }
+    @for (order of orders(); track order._id) {
+      <article class="order-card">
+        <div class="status-row" style="justify-content: space-between;">
+          <div>
+            <strong>{{ when(order.createdAt) }}</strong>
+            <p class="muted">{{ order.shipping.area }}, {{ order.shipping.city }} · {{ payLabel(order.paymentMethod) }}</p>
+          </div>
+          <span class="status" [class.delivered]="order.status === 'Delivered'">{{ order.status }}</span>
+        </div>
+        <div class="order-items">
+          @for (item of order.items; track item.name) {
+            <img [src]="item.image" [alt]="item.name" [title]="item.name + ' × ' + item.qty" />
+          }
+        </div>
+        <div class="summary-row">
+          <span>{{ order.items.length }} {{ order.items.length === 1 ? 'product' : 'products' }}</span>
+          <strong>{{ money(order.total) }}</strong>
+        </div>
+      </article>
+    }
+  </div>
+</div>

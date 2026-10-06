@@ -1,0 +1,268 @@
+<div class="page">
+  <div class="container">
+    <section class="hero-slider" (mouseenter)="pause()" (mouseleave)="resume()" aria-roledescription="carousel" aria-label="Featured collections">
+      @for (slide of slides; track slide.title; let i = $index) {
+        <article class="slide" [class.active]="slideIndex() === i" [attr.aria-hidden]="slideIndex() !== i">
+          <div class="rise">
+            <span class="eyebrow">{{ slide.eyebrow }}</span>
+            <h1>{{ slide.title }}</h1>
+            <p class="lede">{{ slide.lede }}</p>
+            <div class="hero-actions">
+              <a class="btn" [routerLink]="slide.link" [queryParams]="slide.query">{{ slide.cta }}</a>
+              <a class="btn btn-outline" routerLink="/about">Our story</a>
+            </div>
+            <div class="hero-stats">
+              <div><strong>39</strong><span>products in stock</span></div>
+              <div><strong>$50</strong><span>free shipping over</span></div>
+              <div><strong>3–5 days</strong><span>standard delivery</span></div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <img [src]="slide.image" [alt]="slide.alt" />
+            <div class="deal-badge">{{ slide.badge }}</div>
+            <a class="float-card" [routerLink]="['/product', slide.slug]">
+              <small>In the shop · {{ slide.rating }}★</small>
+              <strong>{{ slide.pick }}</strong>
+              <span class="float-row"><b>{{ slide.price }}</b><s>{{ slide.compare }}</s></span>
+              <span class="float-note">{{ slide.note }}</span>
+            </a>
+          </div>
+        </article>
+      }
+      <button class="slide-arrow prev" type="button" (click)="prev(); armSlides()" aria-label="Previous slide">‹</button>
+      <button class="slide-arrow next" type="button" (click)="next(); armSlides()" aria-label="Next slide">›</button>
+      <div class="slide-dots">
+        @for (slide of slides; track slide.title; let i = $index) {
+          <button type="button" [class.on]="slideIndex() === i" (click)="go(i)" [attr.aria-label]="'Show slide ' + (i + 1)"></button>
+        }
+      </div>
+      @for (tick of [slideIndex()]; track tick) {
+        <span class="slide-progress" aria-hidden="true"></span>
+      }
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        @for (item of tickerLoop; track $index) {
+          <span>{{ item }}</span>
+        }
+      </div>
+    </div>
+
+    <section class="trust">
+      <article><span>01</span><div><strong>Free shipping</strong><p>On orders over $50</p></div></article>
+      <article><span>02</span><div><strong>Easy returns</strong><p>30 days, prepaid label</p></div></article>
+      <article><span>03</span><div><strong>Secure checkout</strong><p>Card or cash on delivery</p></div></article>
+      <article><span>04</span><div><strong>Shop notes</strong><p>Replies within one business day</p></div></article>
+    </section>
+
+    @if (error()) {
+      <p class="banner-error">{{ error() }}</p>
+    }
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Shop by category</h2>
+          <p>Six aisles, all in stock at 120 Market Street.</p>
+        </div>
+        <a class="link" routerLink="/shop">Browse the floor</a>
+      </div>
+      <div class="aisles">
+        @for (category of categories(); track category.name) {
+          <a class="aisle" routerLink="/shop" [queryParams]="{ category: category.name }">
+            <img [src]="meta[category.name].image" [alt]="category.name" />
+            <div>
+              <strong>{{ category.name }}</strong>
+              <p>{{ meta[category.name].blurb }}</p>
+              <small>{{ category.count }} in stock</small>
+              @if (picks()[category.name]; as pick) {
+                <span class="aisle-pick">{{ pick.name }} · {{ money(pick.price) }}</span>
+              }
+            </div>
+          </a>
+        }
+      </div>
+      <div class="aisle-notes">
+        <article>
+          <strong>Packed in New York</strong>
+          <p>Orders placed before 2:00 pm on a business day leave the warehouse the same day.</p>
+        </article>
+        <article>
+          <strong>Free shipping over $50</strong>
+          <p>Below that, standard shipping is $10 and the total is shown before checkout.</p>
+        </article>
+        <article>
+          <strong>Thirty days to decide</strong>
+          <p>Unused pieces come back with a prepaid label. Cases and paperwork travel with them.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section look">
+      <a class="look-card tall" routerLink="/shop" [queryParams]="{ category: 'Bags' }">
+        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1200&q=80" alt="Backpack in navy fabric" />
+        <div>
+          <span class="eyebrow">Carry</span>
+          <h3>Bags for the week, not the catalog dump</h3>
+          <span class="link">Shop bags</span>
+        </div>
+      </a>
+      <div class="look-stack">
+        <a class="look-card" routerLink="/shop" [queryParams]="{ category: 'Audio' }">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80" alt="Headphones" />
+          <div>
+            <span class="eyebrow">Listen</span>
+            <h3>Audio that stays on</h3>
+          </div>
+        </a>
+        <a class="look-card" routerLink="/shop" [queryParams]="{ category: 'Home' }">
+          <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1000&q=80" alt="A quiet living room" />
+          <div>
+            <span class="eyebrow">At home</span>
+            <h3>Objects for the room</h3>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section promo">
+      <div class="promo-main">
+        <span class="eyebrow">Limited drop</span>
+        <h2>Up to 40% off</h2>
+        <p>Headphones, bags, and watches marked down while stock lasts.</p>
+        <a class="btn btn-light" routerLink="/shop" [queryParams]="{ deal: 'true' }">Shop the sale</a>
+      </div>
+      <div class="promo-side">
+        <span class="eyebrow">This week</span>
+        <h2>New arrivals</h2>
+        <p>Fresh bags, speakers, and desk objects just landed at 120 Market Street.</p>
+        <a class="btn btn-light" routerLink="/shop">Browse the floor</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Deal of the day</h2>
+          <p>Prices drop until midnight.</p>
+        </div>
+        <div class="clock" aria-label="Time left today">
+          <b>{{ clock().h }}<span>hrs</span></b>
+          <b>{{ clock().m }}<span>min</span></b>
+          <b>{{ clock().s }}<span>sec</span></b>
+        </div>
+      </div>
+      @if (loading()) {
+        <div class="skeleton-grid">
+          @for (item of [1, 2, 3, 4]; track item) { <div class="skeleton-card"></div> }
+        </div>
+      } @else {
+        <div class="grid">
+          @for (product of deals(); track product._id) {
+            <app-product-card [product]="product" />
+          }
+        </div>
+      }
+    </section>
+
+    <section class="section quotes" aria-roledescription="carousel" aria-label="Shopper notes">
+      <div class="section-head">
+        <div>
+          <h2>Notes from the inbox</h2>
+          <p>What shoppers write after the box arrives.</p>
+        </div>
+        <div class="quote-nav">
+          <button type="button" (click)="prevQuote()" aria-label="Previous note">‹</button>
+          <button type="button" (click)="nextQuote()" aria-label="Next note">›</button>
+        </div>
+      </div>
+      <div class="quote-stage">
+        @for (quote of quotes; track quote.name; let i = $index) {
+          <blockquote class="quote" [class.active]="quoteIndex() === i">
+            <p>“{{ quote.text }}”</p>
+            <footer><strong>{{ quote.name }}</strong><span>{{ quote.place }}</span></footer>
+          </blockquote>
+        }
+      </div>
+      <div class="slide-dots quote-dots">
+        @for (quote of quotes; track quote.name; let i = $index) {
+          <button type="button" [class.on]="quoteIndex() === i" (click)="quoteIndex.set(i)" [attr.aria-label]="'Show note from ' + quote.name"></button>
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Featured picks</h2>
+          <p>The pieces people keep coming back for.</p>
+        </div>
+        <a class="link" routerLink="/shop">View all</a>
+      </div>
+      <div class="grid">
+        @for (product of featured(); track product._id) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>From the floor</h2>
+          <p>A look at what is on the tables this week.</p>
+        </div>
+      </div>
+      <div class="gallery">
+        @for (shot of shots; track shot.alt) {
+          <a routerLink="/shop" [queryParams]="{ category: shot.category }">
+            <img [src]="shot.src" [alt]="shot.alt" />
+            <span>{{ shot.category }}</span>
+          </a>
+        }
+      </div>
+    </section>
+
+    <section class="section stories">
+      @for (story of stories; track story.title) {
+        <article>
+          <h3>{{ story.title }}</h3>
+          <p>{{ story.text }}</p>
+          <a class="link" [routerLink]="story.link">{{ story.label }}</a>
+        </article>
+      }
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Why Northline</h2>
+          <p>Straightforward gear, clearly priced.</p>
+        </div>
+      </div>
+      <div class="why">
+        <article><span class="why-icon">01</span><h3>Picked, not piled</h3><p>A short catalog of bags, audio, watches, cameras, and home objects.</p></article>
+        <article><span class="why-icon">02</span><h3>Packed with care</h3><p>Orders leave in protective packaging within two business days.</p></article>
+        <article><span class="why-icon">03</span><h3>Customer care</h3><p>Write to hello&#64;northline.store or use the contact form. We reply within one business day.</p></article>
+        <article><span class="why-icon">04</span><h3>Clear checkout</h3><p>Standard shipping is free over $50 and shown before you place the order. Returns stay open for 30 days.</p></article>
+      </div>
+    </section>
+
+    <section class="section newsletter">
+      <div>
+        <span class="eyebrow">The list</span>
+        <h2>New arrivals, before they hit the homepage.</h2>
+        <p>One note when a bag, a watch, or a sale lands. No daily mail.</p>
+      </div>
+      <form (submit)="subscribe(); $event.preventDefault()">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" [value]="email()" (input)="email.set($any($event.target).value)" placeholder="you@email.com" autocomplete="email" />
+        </label>
+        <button class="btn" type="submit" [disabled]="joining()">{{ joining() ? 'Saving…' : 'Join the list' }}</button>
+        @if (note()) { <p class="muted">{{ note() }}</p> }
+      </form>
+    </section>
+  </div>
+</div>
