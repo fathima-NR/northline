@@ -4,11 +4,14 @@ async function connectDB() {
   const uri = process.env.MONGO_URI;
   const production = process.env.NODE_ENV === 'production';
 
-  if (production) {
-    if (!uri) throw new Error('MONGO_URI is required in production');
+  if (uri && production) {
     await mongoose.connect(uri);
     console.log('MongoDB connected');
     return;
+  }
+
+  if (!uri && production) {
+    console.log('MONGO_URI is not set. Starting a temporary database so products can load.');
   }
 
   try {
