@@ -3,7 +3,7 @@
   "buildCommand": "npm run build --prefix client",
   "outputDirectory": "client/dist/client/browser",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://northline-api.onrender.com/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://northline-api-n817.onrender.com/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
